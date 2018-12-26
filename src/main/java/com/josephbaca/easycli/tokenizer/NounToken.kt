@@ -1,4 +1,4 @@
-package com.josephbaca.easycli
+package com.josephbaca.easycli.tokenizer
 
 /**
  * A token that is attached to a thing, such as an [Entity], [Item], or other concept.

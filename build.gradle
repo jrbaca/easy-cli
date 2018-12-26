@@ -23,6 +23,15 @@ compileTestKotlin {
     }
 }
 
+test {
+    useJUnitPlatform() // necessary to activate Gradle's JUnit5 support
+    outputs.upToDateWhen { false }
+
+    minHeapSize = "512m"
+    maxHeapSize = "2048m"
+    jvmArgs = ["-Xss128m"] // bigger stack as well
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"

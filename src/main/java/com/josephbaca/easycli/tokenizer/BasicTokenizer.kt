@@ -1,4 +1,4 @@
-package com.josephbaca.easycli
+package com.josephbaca.easycli.tokenizer
 
 internal object BasicTokenizer: Tokenizer {
 

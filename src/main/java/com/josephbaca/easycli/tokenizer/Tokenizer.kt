@@ -1,6 +1,6 @@
-package com.josephbaca.easycli
+package com.josephbaca.easycli.tokenizer
 
-internal interface Tokenizer {
+interface Tokenizer {
 
     fun tokenizeInput(input: String, tokens: Set<Token>): List<Token>?
 }

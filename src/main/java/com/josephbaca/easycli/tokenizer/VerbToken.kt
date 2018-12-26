@@ -1,4 +1,4 @@
-package com.josephbaca.easycli
+package com.josephbaca.easycli.tokenizer
 
 /**
  * A token that can be attached to a function.
