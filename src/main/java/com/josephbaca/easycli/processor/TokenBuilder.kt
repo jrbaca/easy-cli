@@ -1,6 +1,6 @@
 package com.josephbaca.easycli.processor
 
-object TokenBuilder {
+internal object TokenBuilder {
 
     fun command(): CommandBuilder {
         return CommandBuilder()

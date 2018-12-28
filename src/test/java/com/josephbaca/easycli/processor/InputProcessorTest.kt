@@ -1,9 +1,7 @@
 package com.josephbaca.easycli.processor
 
-import com.josephbaca.easycli.parser.PlainParser
 import com.josephbaca.easycli.processor.TokenBuilder.arg
 import com.josephbaca.easycli.processor.TokenBuilder.command
-import com.josephbaca.easycli.tokenizer.BasicTokenizer
 import com.josephbaca.easycli.tokenizer.TokenPattern
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -14,11 +12,12 @@ class InputProcessorTest {
 
     private fun buildTestInputProcessor(): InputProcessor {
         return InputProcessorBuilder()
-            .withParser(PlainParser)
-            .withTokenizer(BasicTokenizer)
+            .withParser(InputProcessorBuilder.Parsers.Plain)
+            .withTokenizer(InputProcessorBuilder.Tokenizers.Basic)
             .withCommands(
                 command()
                     .withName("hello")
+                    .withAdditionalRegex(Regex("hi"))
                     .withDescription("Says hi")
                     .thatCalls(this::sayHello),
 
@@ -48,12 +47,12 @@ class InputProcessorTest {
 
 
     // Simple funcs
-    fun sayHello(): String {
+    private fun sayHello(): String {
         return "Hello world"
     }
 
     // Use enums
-    fun go(direction: Direction): String {
+    private fun go(direction: Direction): String {
         return "going %s".format(direction.name)
     }
 

@@ -1,6 +1,5 @@
 package com.josephbaca.easycli.tokenizer
 
-import com.josephbaca.easycli.parser.PlainParser
 import com.josephbaca.easycli.processor.InputProcessor
 import com.josephbaca.easycli.processor.InputProcessorBuilder
 import com.josephbaca.easycli.processor.InputProcessorTest
@@ -15,8 +14,8 @@ internal class TokenizerTest {
 
     private fun buildTestInputProcessor(): InputProcessor {
         return InputProcessorBuilder()
-            .withParser(PlainParser)
-            .withTokenizer(BasicTokenizer)
+            .withParser(InputProcessorBuilder.Parsers.Plain)
+            .withTokenizer(InputProcessorBuilder.Tokenizers.Basic)
             .withCommands(
                 command()
                     .withName("hello")

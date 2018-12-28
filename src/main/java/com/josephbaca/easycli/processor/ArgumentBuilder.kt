@@ -5,15 +5,15 @@ import com.josephbaca.easycli.tokenizer.TokenPattern
 
 class ArgumentBuilder {
 
-    var name: String? = null
-    var regex: Regex? = null
+    private var name: String? = null
+    private var regex: Regex? = null
 
     fun withName(name: String): ArgumentBuilder {
         this.name = name.toUpperCase()
         return this
     }
 
-    fun build(): ArgumentTokenPattern {
+    internal fun build(): ArgumentTokenPattern {
         return ArgumentTokenPattern(name!!, regex!!)
     }
 

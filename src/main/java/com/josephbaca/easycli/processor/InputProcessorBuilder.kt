@@ -21,18 +21,30 @@ class InputProcessorBuilder {
         return InputProcessor(tokenizer, parser, commandTokenPatterns, argumentTokens)
     }
 
-    fun withParser(parser: Parser): InputProcessorBuilder {
-        this.parser = parser
+    fun withParser(parser: Parsers): InputProcessorBuilder {
+        this.parser = when (parser) {
+            Parsers.Plain -> PlainParser
+        }
         return this
     }
 
-    fun withTokenizer(tokenizer: Tokenizer): InputProcessorBuilder {
-        this.tokenizer = tokenizer
+    fun withTokenizer(tokenizer: Tokenizers): InputProcessorBuilder {
+        this.tokenizer = when (tokenizer) {
+            Tokenizers.Basic -> BasicTokenizer
+        }
         return this
     }
 
     fun withCommands(vararg commands: CommandBuilder): InputProcessorBuilder {
         this.commandTokenPatterns = commands.map { it.build() }.toSet()
         return this
+    }
+
+    enum class Parsers {
+        Plain
+    }
+
+    enum class Tokenizers {
+        Basic
     }
 }

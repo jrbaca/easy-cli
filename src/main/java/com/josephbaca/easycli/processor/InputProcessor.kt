@@ -14,21 +14,23 @@ class InputProcessor internal constructor(
     private val argumentTokenPatterns: Set<ArgumentTokenPattern>
 ) {
 
-    private val LOG = org.slf4j.LoggerFactory.getLogger(this::class.java)
-
     fun parse(input: String): String {
-        return parse(tokenize(input))
+        return parse(tokenize(input)).invoke()
     }
 
-    fun tokenize(input: String): List<Token> {
+    internal fun tokenize(input: String): List<Token> {
         val tokens = tokenizer.tokenize(input, commandTokenPatterns.plus(argumentTokenPatterns))
         LOG.info("Found tokens %s".format(tokens))
         return tokens
     }
 
-    fun parse(tokens: List<Token>): String {
+    private fun parse(tokens: List<Token>): () -> String {
         val response = parser.parse(tokens, commandTokenPatterns)
         LOG.info("Responding with \"%s\"".format(response))
         return response
+    }
+
+    companion object {
+        private val LOG = org.slf4j.LoggerFactory.getLogger(this::class.java)
     }
 }
