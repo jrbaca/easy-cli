@@ -4,11 +4,8 @@ import com.josephbaca.easycli.parser.PlainParser
 import com.josephbaca.easycli.processor.InputProcessor
 import com.josephbaca.easycli.processor.InputProcessorBuilder
 import com.josephbaca.easycli.processor.InputProcessorTest
-import com.josephbaca.easycli.processor.TokenBuilder
-import com.josephbaca.easycli.tokenizer.BasicTokenizer
 import com.josephbaca.easycli.processor.TokenBuilder.command
 import com.josephbaca.easycli.processor.TokenBuilder.arg
-import com.josephbaca.easycli.tokenizer.CommandToken
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 

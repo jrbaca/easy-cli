@@ -1,11 +1,9 @@
 package com.josephbaca.easycli.tokenizer
 
 
-internal open class Token(
+internal class ArgumentTokenPattern(
     override val name: String,
-    override val pattern: Regex,
-    val data: String
-
+    override val pattern: Regex
 ) : TokenPattern {
 
     override fun toString(): String {

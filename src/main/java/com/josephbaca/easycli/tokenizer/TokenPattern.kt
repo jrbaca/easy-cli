@@ -4,5 +4,4 @@ interface TokenPattern {
 
     val name: String
     val pattern: Regex
-
 }

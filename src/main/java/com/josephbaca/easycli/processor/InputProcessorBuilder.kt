@@ -8,7 +8,7 @@ class InputProcessorBuilder {
 
     private var tokenizer: Tokenizer
     private var parser: Parser
-    private var commandTokens: Set<CommandToken> = mutableSetOf()
+    private var commandTokenPatterns: Set<CommandTokenPattern> = mutableSetOf()
 
     init {
         // Set defaults
@@ -17,8 +17,8 @@ class InputProcessorBuilder {
     }
 
     fun build(): InputProcessor {
-        val argumentTokens = commandTokens.flatMap { it.arguments }.toSet()
-        return InputProcessor(tokenizer, parser, commandTokens, argumentTokens)
+        val argumentTokens = commandTokenPatterns.flatMap { it.arguments }.toSet()
+        return InputProcessor(tokenizer, parser, commandTokenPatterns, argumentTokens)
     }
 
     fun withParser(parser: Parser): InputProcessorBuilder {
@@ -32,7 +32,7 @@ class InputProcessorBuilder {
     }
 
     fun withCommands(vararg commands: CommandBuilder): InputProcessorBuilder {
-        this.commandTokens = commands.map { it.build() }.toSet()
+        this.commandTokenPatterns = commands.map { it.build() }.toSet()
         return this
     }
 }

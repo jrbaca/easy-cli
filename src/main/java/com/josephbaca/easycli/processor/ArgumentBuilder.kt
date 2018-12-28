@@ -1,6 +1,6 @@
 package com.josephbaca.easycli.processor
 
-import com.josephbaca.easycli.tokenizer.ArgumentToken
+import com.josephbaca.easycli.tokenizer.ArgumentTokenPattern
 import com.josephbaca.easycli.tokenizer.TokenPattern
 
 class ArgumentBuilder {
@@ -13,8 +13,8 @@ class ArgumentBuilder {
         return this
     }
 
-    fun build(): ArgumentToken {
-        return ArgumentToken(name!!, regex!!)
+    fun build(): ArgumentTokenPattern {
+        return ArgumentTokenPattern(name!!, regex!!)
     }
 
     fun from(tokenPatterns: Set<TokenPattern>): ArgumentBuilder {
