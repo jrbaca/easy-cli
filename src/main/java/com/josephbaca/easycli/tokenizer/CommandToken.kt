@@ -1,14 +1,12 @@
 package com.josephbaca.easycli.tokenizer
 
+import kotlin.reflect.KFunction
+
 class CommandToken(
-    name: String,
-    regex: Regex,
+    override val name: String,
+    override val pattern: Regex,
     val description: String,
     val arguments: List<ArgumentToken>,
-    val functionToCall: (Array<Any>) -> String
-) : Token(name, regex) {
+    val function: KFunction<String>
 
-    fun getFunctionResult(args: Array<Any>): String {
-        return functionToCall(args)
-    }
-}
+) : TokenPattern

@@ -2,6 +2,6 @@ package com.josephbaca.easycli.tokenizer
 
 
 class ArgumentToken(
-    name: String,
-    regex: Regex
-) : Token(name, regex)
+    override val name: String,
+    override val pattern: Regex
+) : TokenPattern

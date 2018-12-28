@@ -2,6 +2,7 @@ package com.josephbaca.easycli.processor
 
 import com.josephbaca.easycli.tokenizer.ArgumentToken
 import com.josephbaca.easycli.tokenizer.CommandToken
+import kotlin.reflect.KFunction
 
 class CommandBuilder {
 
@@ -9,7 +10,7 @@ class CommandBuilder {
     private var additionalRegex: Regex? = null
     private var description: String? = null
     private var arguments: MutableList<ArgumentToken> = mutableListOf()
-    private var functionToCall: ((Array<Any>) -> String)? = null
+    private var function: KFunction<String>? = null
 
     fun withName(name: String): CommandBuilder {
         this.name = name.toUpperCase()
@@ -21,9 +22,9 @@ class CommandBuilder {
         return this
     }
 
-    fun thatCalls(function: (Array<Any>) -> String): CommandBuilder {
-        this.functionToCall = function
-            return this
+    fun thatCalls(function: KFunction<String>): CommandBuilder {
+        this.function = function
+        return this
     }
 
     fun withAdditionalRegex(pattern: String): CommandBuilder {
@@ -41,7 +42,7 @@ class CommandBuilder {
     }
 
     internal fun build(): CommandToken {
-        return CommandToken(name!!, Regex("(?i)" + name!!), description!!, arguments, functionToCall!!)
+        return CommandToken(name!!, Regex("(?i)" + name!!), description!!, arguments, function!!)
     }
 
 }

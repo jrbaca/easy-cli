@@ -3,6 +3,8 @@ package com.josephbaca.easycli.tokenizer
 import com.josephbaca.easycli.parser.PlainParser
 import com.josephbaca.easycli.processor.InputProcessor
 import com.josephbaca.easycli.processor.InputProcessorBuilder
+import com.josephbaca.easycli.processor.InputProcessorTest
+import com.josephbaca.easycli.processor.TokenBuilder
 import com.josephbaca.easycli.tokenizer.BasicTokenizer
 import com.josephbaca.easycli.processor.TokenBuilder.command
 import com.josephbaca.easycli.processor.TokenBuilder.arg
@@ -30,16 +32,14 @@ internal class TokenizerTest {
                     .withDescription("Takes you in a direction")
                     .thatCalls(this::go)
                     .hasArg(
-                        arg().withName("direction").fromList(
-                            listOf(
-                                "up",
-                                "down",
-                                "left",
-                                "right"
-                            )
-                        )
+                        arg().withName("direction").from(InputProcessorTest.Direction.values().toSet())
                     )
+//              command()
+//                  .withName("equip").hasArg(
+//                        arg().withName("item").thatCorrespondsTo(inventoryItems)
+//                    ).withDescription("Equips specified item").thatCalls(this::equip)
             )
+
             .build()
     }
 
@@ -55,7 +55,7 @@ internal class TokenizerTest {
     @Test
     fun twoTokensMatch() {
 
-        val tokens = inputProcessor.tokenize("go up")
+        val tokens = inputProcessor.tokenize("go north")
 
         assertTrue(tokens.size == 2)
         assertEquals("GO", tokens[0].name)

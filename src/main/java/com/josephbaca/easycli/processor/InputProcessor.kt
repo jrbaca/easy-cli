@@ -27,7 +27,7 @@ class InputProcessor internal constructor(
     }
 
     fun parse(tokens: List<Token>): String {
-        val response = parser.parse(tokens)
+        val response = parser.parse(tokens, commandTokens)
         LOG.info("Responding with \"%s\"".format(response))
         return response
     }

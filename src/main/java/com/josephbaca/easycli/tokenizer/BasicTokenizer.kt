@@ -1,5 +1,7 @@
 package com.josephbaca.easycli.tokenizer
 
+import java.lang.RuntimeException
+
 internal object BasicTokenizer: Tokenizer {
 
     private val LOG = org.slf4j.LoggerFactory.getLogger(this::class.java)
@@ -9,12 +11,12 @@ internal object BasicTokenizer: Tokenizer {
      */
     override fun tokenize(
             input: String,
-            tokens: Set<Token>
+            tokens: Set<TokenPattern>
     ): List<Token> {
         val preProcessedInput = preProcessInput(input)
 
         LOG.info("Attempting to tokenize \"%s\" with tokens %s".format(preProcessedInput, tokens))
-        return iterativelyMatchTokens(preProcessedInput, tokens)!!
+        return iterativelyMatchTokens(preProcessedInput, tokens)
     }
 
     private fun preProcessInput(input: String): String {
@@ -31,8 +33,8 @@ internal object BasicTokenizer: Tokenizer {
      */
     private fun iterativelyMatchTokens(
             input: String,
-            tokens: Set<Token>
-    ): List<Token>? {
+            tokens: Set<TokenPattern>
+    ): List<Token> {
 
         val foundTokens: MutableList<Token> = mutableListOf()
         val matchedStrings: MutableList<String> = mutableListOf()
@@ -42,17 +44,17 @@ internal object BasicTokenizer: Tokenizer {
             val searchString = input.substring(startIndex, endIndex).trim()
             LOG.debug("Searching \"%s\" from \"%s\"".format(searchString, input))
 
-            // Empty list if no match, List of one if single match, return null if multiple matches
-            val matchingToken: List<Token> =
-                    getSingleMatchingToken(searchString, tokens) ?: return null
+            // Null if no token found
+            val matchingToken: Token?=
+                    getSingleMatchingToken(searchString, tokens)
 
-            if (!matchingToken.isEmpty()) {
+            if (matchingToken != null) {
                 startIndex = endIndex
-                foundTokens.add(matchingToken.single())
+                foundTokens.add(matchingToken)
                 matchedStrings.add(searchString)
             }
         }
-        return if (matchedStrings.joinToString(" ") == input) foundTokens else null // Didn't fully tokenize
+        return if (matchedStrings.joinToString(" ") == input) foundTokens else throw RuntimeException("Didn't fully tokenize") // Didn't fully tokenize TODO custom exception
     }
 
     /**
@@ -60,26 +62,26 @@ internal object BasicTokenizer: Tokenizer {
      */
     private fun getSingleMatchingToken(
             input: String,
-            tokens: Set<Token>
-    ): List<Token>? {
+            tokens: Set<TokenPattern>
+    ): Token? {
 
         val matchingTokens = getMatchingTokens(input, tokens)
+
         return if (matchingTokens.size > 1) {
-            LOG.warn("Too many tokens match!")
-            null
+            throw RuntimeException("Too many tokens matched!") //TODO custom exception
         } else {
-            matchingTokens
+            matchingTokens.singleOrNull()
         }
     }
 
     private fun getMatchingTokens(
             input: String,
-            tokens: Set<Token>
-    ): List<Token> {
-        return tokens.filter { token -> inputMatchesTokenRegex(input, token) }
+            tokens: Set<TokenPattern>
+    ): Set<Token> {
+        return tokens.filter { inputMatchesTokenRegex(input, it) }.map { Token(it.name, it.pattern, input) }.toSet()
     }
 
-    private fun inputMatchesTokenRegex(input: String, token: Token): Boolean {
-        return input.matches(token.regex)
+    private fun inputMatchesTokenRegex(input: String, token: TokenPattern): Boolean {
+        return input.matches(token.pattern)
     }
 }
