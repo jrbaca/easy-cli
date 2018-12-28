@@ -7,14 +7,14 @@ internal object BasicTokenizer: Tokenizer {
     /**
      * Tokenizes an input given a set of possible allTokens. Returns null if tokenizer fails.
      */
-    override fun tokenizeInput(
+    override fun tokenize(
             input: String,
             tokens: Set<Token>
-    ): List<Token>? {
+    ): List<Token> {
         val preProcessedInput = preProcessInput(input)
 
         LOG.info("Attempting to tokenize \"%s\" with tokens %s".format(preProcessedInput, tokens))
-        return iterativelyMatchTokens(preProcessedInput, tokens)
+        return iterativelyMatchTokens(preProcessedInput, tokens)!!
     }
 
     private fun preProcessInput(input: String): String {

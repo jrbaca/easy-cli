@@ -3,7 +3,9 @@ package com.josephbaca.easycli.tokenizer
 /**
  * Any token that can be extracted from a string via regex.
  */
-interface Token {
+open class Token(val name: String, val regex: Regex) {
 
-    val regex: Regex
+    override fun toString(): String {
+        return name
+    }
 }
