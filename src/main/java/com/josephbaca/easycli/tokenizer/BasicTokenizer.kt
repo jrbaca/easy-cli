@@ -50,7 +50,7 @@ internal object BasicTokenizer : Tokenizer {
         if (matchedStrings.joinToString(" ") == input)
             return foundTokens
         else
-            throw RuntimeException("Didn't fully tokenize") // TODO custom exception
+            throw UnmatchableInputException()
     }
 
     private fun getMatchingToken(
@@ -61,7 +61,7 @@ internal object BasicTokenizer : Tokenizer {
         val matchingTokens = getMatchingTokens(input, tokenPatterns)
 
         if (matchingTokens.size > 1)
-            throw RuntimeException("Too many tokens matched!") //TODO custom exception
+            throw OverlappingPatternException("Matched %s with %s".format(input, matchingTokens))
         else
             return matchingTokens.singleOrNull()
 

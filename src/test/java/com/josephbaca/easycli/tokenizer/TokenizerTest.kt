@@ -42,7 +42,7 @@ internal class TokenizerTest {
     @Test
     fun oneTokenMatches() {
 
-        val tokens = inputProcessor.tokenize("hello")
+        val tokens = inputProcessor.tokenizeInput("hello")
 
         assertTrue(tokens.size == 1)
         assertEquals("HELLO", tokens[0].name)
@@ -51,7 +51,7 @@ internal class TokenizerTest {
     @Test
     fun twoTokensMatch() {
 
-        val tokens = inputProcessor.tokenize("go north")
+        val tokens = inputProcessor.tokenizeInput("go north")
 
         assertTrue(tokens.size == 2)
         assertEquals("GO", tokens[0].name)

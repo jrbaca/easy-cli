@@ -45,14 +45,30 @@ class InputProcessorTest {
         assertEquals("Hello world", response)
     }
 
+    @Test
+    fun functionWithOneArg() {
+
+        val response = inputProcessor.parse("go north")
+        assertEquals("going north", response)
+    }
+
+    @Test
+    fun getHelp() {
+
+        val response = inputProcessor.help()
+        assertEquals("", response)
+    }
+
 
     // Simple funcs
-    private fun sayHello(): String {
+    @SuppressWarnings("WeakerAccess")
+    fun sayHello(): String {
         return "Hello world"
     }
 
     // Use enums
-    private fun go(direction: Direction): String {
+    @SuppressWarnings("WeakerAccess")
+    fun go(direction: Direction): String {
         return "going %s".format(direction.name)
     }
 
