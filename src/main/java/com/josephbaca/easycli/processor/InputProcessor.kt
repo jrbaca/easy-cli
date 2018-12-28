@@ -12,33 +12,23 @@ class InputProcessor internal constructor(
 
     private val commandTokens: Set<CommandToken>,
     private val argumentTokens: Set<ArgumentToken>
-
-//    private val commandTokenToFunctionMap: Map<CommandToken, (List<ArgumentToken>) -> String?>,
-//    private val argTokens: Set<ArgumentToken>
 ) {
 
     private val LOG = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
     fun parse(input: String): String {
-        LOG.info("Processing input: \"%s\"".format(input))
+        return parse(tokenize(input))
+    }
 
+    fun tokenize(input: String): List<Token> {
         val tokens = tokenizer.tokenize(input, commandTokens.plus(argumentTokens))
         LOG.info("Found tokens %s".format(tokens))
+        return tokens
+    }
 
+    fun parse(tokens: List<Token>): String {
         val response = parser.parse(tokens)
         LOG.info("Responding with \"%s\"".format(response))
         return response
     }
-
-//    fun help(): String {
-//        return allTokens
-//            .sortedBy { it.name }
-//            .joinToString(separator = "\n") { "%s: %s".format(it.name, it.description) }
-//
-////        return allTokens.toString()
-////        return allVerbTokens.keys.sortedBy { token -> token.helpUsage }
-////            .joinToString(separator = "\n") { token ->
-////                "%s: %s".format(token.helpUsage, token.helpString)
-////            }
-//    }
 }

@@ -12,7 +12,7 @@ class CommandBuilder {
     private var functionToCall: ((Array<Any>) -> String)? = null
 
     fun withName(name: String): CommandBuilder {
-        this.name = name
+        this.name = name.toUpperCase()
         return this
     }
 
@@ -41,7 +41,7 @@ class CommandBuilder {
     }
 
     internal fun build(): CommandToken {
-        return CommandToken(name!!, Regex(name!!), description!!, arguments, functionToCall!!)
+        return CommandToken(name!!, Regex("(?i)" + name!!), description!!, arguments, functionToCall!!)
     }
 
 }

@@ -7,17 +7,12 @@ class ArgumentBuilder {
     var regex: Regex? = null
 
     fun withName(name: String): ArgumentBuilder {
-        this.name = name
+        this.name = name.toUpperCase()
         return this
     }
 
     fun fromList(list: List<Any>): ArgumentBuilder {
-        this.regex = Regex(list.joinToString(separator = "|"))
-        return this
-    }
-
-    fun thatCorrespondsTo(any: Any): ArgumentBuilder {
-        // TODO
+        this.regex = Regex("(?i)" + list.joinToString(separator = "|"))
         return this
     }
 
