@@ -2,9 +2,9 @@ package com.josephbaca.easycli.processor
 
 import com.josephbaca.easycli.parser.Parser
 import com.josephbaca.easycli.tokenizer.ArgumentTokenPattern
-import com.josephbaca.easycli.tokenizer.Tokenizer
 import com.josephbaca.easycli.tokenizer.CommandTokenPattern
 import com.josephbaca.easycli.tokenizer.Token
+import com.josephbaca.easycli.tokenizer.Tokenizer
 import kotlin.reflect.full.IllegalCallableAccessException
 
 class InputProcessor internal constructor(
@@ -17,7 +17,9 @@ class InputProcessor internal constructor(
 
     fun parse(input: String): String {
         val function = parseTokens(tokenizeInput(input))
-        return invokeFunction(function)
+        val response = invokeFunction(function)
+        LOG.info("Responding with \"%s\"".format(response))
+        return response
     }
 
     internal fun tokenizeInput(input: String): List<Token> {
@@ -27,9 +29,7 @@ class InputProcessor internal constructor(
     }
 
     private fun parseTokens(tokens: List<Token>): () -> String {
-        val response = parser.parse(tokens, commandTokenPatterns)
-        LOG.info("Responding with \"%s\"".format(response))
-        return response
+        return parser.parse(tokens, commandTokenPatterns)
     }
 
     private fun invokeFunction(function: () -> String): String {
