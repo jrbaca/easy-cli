@@ -70,7 +70,7 @@ class InputProcessorTest {
     // Use enums
     @SuppressWarnings("WeakerAccess")
     fun go(direction: Direction): String {
-        return "going %s".format(direction.name)
+        return "going %s".format(direction.name.toLowerCase())
     }
 
     // Use classes

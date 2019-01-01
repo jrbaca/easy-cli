@@ -9,7 +9,11 @@ internal object PlainParser : Parser {
 
     override fun parse(input: List<Token>, tokenPatterns: Set<TokenPattern>): () -> String {
         val commandToken = input[0] as CommandToken
-        val args: Array<out Any> = input.drop(1).filterIsInstance<ArgumentToken>().toTypedArray()
+        val args: Array<out Any> = input
+            .drop(1)
+            .filterIsInstance<ArgumentToken>()
+            .map { it.original }
+            .toTypedArray()
 
         return { commandToken.function.call(*args) }
     }
