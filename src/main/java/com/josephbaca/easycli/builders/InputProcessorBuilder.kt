@@ -1,8 +1,11 @@
-package com.josephbaca.easycli.processor
+package com.josephbaca.easycli.builders
 
 import com.josephbaca.easycli.parser.Parser
 import com.josephbaca.easycli.parser.PlainParser
-import com.josephbaca.easycli.tokenizer.*
+import com.josephbaca.easycli.processor.InputProcessor
+import com.josephbaca.easycli.tokenizer.BasicTokenizer
+import com.josephbaca.easycli.tokenizer.CommandTokenPattern
+import com.josephbaca.easycli.tokenizer.Tokenizer
 
 class InputProcessorBuilder {
 

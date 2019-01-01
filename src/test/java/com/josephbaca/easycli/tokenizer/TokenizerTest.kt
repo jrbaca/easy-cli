@@ -1,12 +1,13 @@
 package com.josephbaca.easycli.tokenizer
 
+import com.josephbaca.easycli.builders.InputProcessorBuilder
+import com.josephbaca.easycli.builders.TokenBuilder.arg
+import com.josephbaca.easycli.builders.TokenBuilder.command
 import com.josephbaca.easycli.processor.InputProcessor
-import com.josephbaca.easycli.processor.InputProcessorBuilder
 import com.josephbaca.easycli.processor.InputProcessorTest
-import com.josephbaca.easycli.processor.TokenBuilder.command
-import com.josephbaca.easycli.processor.TokenBuilder.arg
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
 internal class TokenizerTest {
 
@@ -24,7 +25,7 @@ internal class TokenizerTest {
 
                 command()
                     .withName("go")
-                    .withAdditionalRegex("move")
+                    .withAdditionalRegex(Regex("move"))
                     .withDescription("Takes you in a direction")
                     .thatCalls(this::go)
                     .hasArg(

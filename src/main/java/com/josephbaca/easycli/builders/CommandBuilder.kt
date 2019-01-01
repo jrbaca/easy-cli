@@ -1,4 +1,4 @@
-package com.josephbaca.easycli.processor
+package com.josephbaca.easycli.builders
 
 import com.josephbaca.easycli.tokenizer.ArgumentTokenPattern
 import com.josephbaca.easycli.tokenizer.CommandTokenPattern
@@ -7,7 +7,7 @@ import kotlin.reflect.KFunction
 class CommandBuilder {
 
     private var name: String? = null
-    private var additionalRegex: Regex? = null
+    private var additionalRegex: MutableSet<Regex> = mutableSetOf()
     private var description: String? = null
     private var argumentPatterns: MutableList<ArgumentTokenPattern> = mutableListOf()
     private var function: KFunction<String>? = null
@@ -27,12 +27,8 @@ class CommandBuilder {
         return this
     }
 
-    fun withAdditionalRegex(pattern: String): CommandBuilder {
-        return withAdditionalRegex(Regex(pattern))
-    }
-
     fun withAdditionalRegex(regex: Regex): CommandBuilder {
-        this.additionalRegex = regex
+        this.additionalRegex.plus(regex)
         return this
     }
 
@@ -42,7 +38,13 @@ class CommandBuilder {
     }
 
     internal fun build(): CommandTokenPattern {
-        return CommandTokenPattern(name!!, Regex("(?i)" + name!!), description!!, argumentPatterns, function!!)
+        return CommandTokenPattern(
+            name!!,
+            setOf(Regex(name!!.toLowerCase())).plus(additionalRegex),
+            description!!,
+            argumentPatterns,
+            function!!
+        )
     }
 
 }

@@ -5,7 +5,7 @@ import kotlin.reflect.KFunction
 
 internal class CommandTokenPattern(
     override val name: String,
-    override val pattern: Regex,
+    override val patterns: Set<Regex>,
     val description: String,
     val arguments: List<ArgumentTokenPattern>,
     val function: KFunction<String>

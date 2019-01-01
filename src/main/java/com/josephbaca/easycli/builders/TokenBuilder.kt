@@ -1,4 +1,4 @@
-package com.josephbaca.easycli.processor
+package com.josephbaca.easycli.builders
 
 internal object TokenBuilder {
 

@@ -1,9 +1,10 @@
 package com.josephbaca.easycli.processor
 
-import com.josephbaca.easycli.processor.TokenBuilder.arg
-import com.josephbaca.easycli.processor.TokenBuilder.command
-import com.josephbaca.easycli.tokenizer.TokenPattern
-import org.junit.jupiter.api.Assertions.*
+import com.josephbaca.easycli.builders.InputProcessorBuilder
+import com.josephbaca.easycli.builders.TokenBuilder.arg
+import com.josephbaca.easycli.builders.TokenBuilder.command
+import com.josephbaca.easycli.builders.Tokenizable
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class InputProcessorTest {
@@ -23,7 +24,7 @@ class InputProcessorTest {
 
                 command()
                     .withName("go")
-                    .withAdditionalRegex("move")
+                    .withAdditionalRegex(Regex("move"))
                     .withDescription("Takes you in a direction")
                     .thatCalls(this::go)
                     .hasArg(
@@ -83,7 +84,7 @@ class InputProcessorTest {
         return "Item power changed to %s!".format(item.power)
     }
 
-    enum class Direction(override val pattern: Regex) : TokenPattern {
+    enum class Direction(override val pattern: Regex) : Tokenizable {
         NORTH(Regex("north")),
         SOUTH(Regex("south")),
         EAST(Regex("east")),
