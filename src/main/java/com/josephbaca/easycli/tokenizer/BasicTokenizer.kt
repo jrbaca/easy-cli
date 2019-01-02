@@ -55,7 +55,7 @@ internal object BasicTokenizer : Tokenizer {
 
     private fun getMatchingToken(input: String, tokenPatterns: Set<TokenPattern>): Token? {
 
-        val matchingTokens = getMatchingTokens(input, tokenPatterns)
+        val matchingTokens = purgeIdenticalTokens(getMatchingTokens(input, tokenPatterns))
 
         if (matchingTokens.size > 1)
             throw OverlappingPatternException("Matched %s with %s".format(input, matchingTokens))
@@ -67,6 +67,27 @@ internal object BasicTokenizer : Tokenizer {
     private fun getMatchingTokens(input: String, tokenPatterns: Set<TokenPattern>): Set<Token> {
 
         return tokenPatterns.mapNotNull { makeTokenIfRegexMatches(input, it) }.toSet()
+    }
+
+    private fun purgeIdenticalTokens(tokens: Set<Token>): Set<Token> {
+        // TODO this
+        val uniqueArgumentTokens = mutableSetOf<ArgumentToken>()
+        val commandTokens = mutableSetOf<CommandToken>()
+
+        for (token in tokens) {
+            when (token) {
+                is ArgumentToken -> {
+                    if (!uniqueArgumentTokens
+                            .map { it.original == token.original }
+                            .fold(false) { l, r -> l || r }
+                    ) {
+                        uniqueArgumentTokens.add(token)
+                    }
+                }
+                is CommandToken -> commandTokens.add(token)
+            }
+        }
+        return uniqueArgumentTokens.plus(commandTokens)
     }
 
     private fun makeTokenIfRegexMatches(input: String, tokenPattern: TokenPattern): Token? {

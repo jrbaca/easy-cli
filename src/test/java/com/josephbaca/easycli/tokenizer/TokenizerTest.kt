@@ -3,6 +3,7 @@ package com.josephbaca.easycli.tokenizer
 import com.josephbaca.easycli.builders.InputProcessorBuilder
 import com.josephbaca.easycli.builders.TokenBuilder.arg
 import com.josephbaca.easycli.builders.TokenBuilder.command
+import com.josephbaca.easycli.builders.Tokenizable
 import com.josephbaca.easycli.processor.InputProcessor
 import com.josephbaca.easycli.processor.InputProcessorTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -25,16 +26,18 @@ internal class TokenizerTest {
 
                 command()
                     .withName("go")
-                    .withAdditionalRegex(Regex("move"))
+                    .withDescription("Takes you in a direction")
+                    .thatCalls(this::go)
+                    .hasArg(
+                        arg().withName("direction").from(InputProcessorTest.Direction.values().toSet())
+                    ),
+                command()
+                    .withName("move") // Intentional duplicate
                     .withDescription("Takes you in a direction")
                     .thatCalls(this::go)
                     .hasArg(
                         arg().withName("direction").from(InputProcessorTest.Direction.values().toSet())
                     )
-//              command()
-//                  .withName("equip").hasArg(
-//                        arg().withName("item").thatCorrespondsTo(inventoryItems)
-//                    ).withDescription("Equips specified item").thatCalls(this::equip)
             )
 
             .build()
@@ -56,18 +59,35 @@ internal class TokenizerTest {
 
         assertTrue(tokens.size == 2)
         assertEquals("GO", tokens[0].name)
-//        assertEquals("up", tokens[0].)
 
         assertEquals("DIRECTION", tokens[1].name)
-//        assertEquals("up", tokens[1].name)
+    }
+
+    @Test
+    fun duplicateTokensMergeAndStillParse() {
+        val tokens = inputProcessor.tokenizeInput("move north")
+
+        assertTrue(tokens.size == 2)
+        assertEquals("DIRECTION", tokens[1].name)
     }
 
 
-    private fun sayHello(args: Array<Any>): String {
+    // Simple funcs
+    @SuppressWarnings("WeakerAccess")
+    fun sayHello(): String {
         return "Hello world"
     }
 
-    private fun go(args: Array<Any>): String {
-        return "Hello world"
+    // Use enums
+    @SuppressWarnings("WeakerAccess")
+    fun go(direction: Direction): String {
+        return "going %s".format(direction.name.toLowerCase())
+    }
+
+    enum class Direction(override val pattern: Regex) : Tokenizable {
+        NORTH(Regex("north")),
+        SOUTH(Regex("south")),
+        EAST(Regex("east")),
+        WEST(Regex("west"))
     }
 }

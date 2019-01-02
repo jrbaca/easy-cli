@@ -9,8 +9,23 @@ import org.junit.jupiter.api.Test
 
 class InputProcessorTest {
 
-    private val inventoryItems = setOf(Item("sword", 2), Item("Knife", 3))
+    private val inventoryItems = setOf(Item("sword", 2), Item("knife", 3))
     private val inputProcessor = buildTestInputProcessor()
+
+    enum class Direction(override val pattern: Regex) : Tokenizable {
+        NORTH(Regex("north")),
+        SOUTH(Regex("south")),
+        EAST(Regex("east")),
+        WEST(Regex("west"))
+    }
+
+    class Item(val name: String, var power: Int) : Tokenizable {
+        override val pattern = Regex(name)
+
+        override fun toString(): String {
+            return "%s(%s)".format(name, power)
+        }
+    }
 
     private fun buildTestInputProcessor(): InputProcessor {
         return InputProcessorBuilder()
@@ -34,13 +49,13 @@ class InputProcessorTest {
                 command()
                     .withName("equip").hasArg(
                         arg().withName("item").from(inventoryItems)
-                    ).withDescription("Equips specified item").thatCalls(this::equip)
-//                command()
-//                    .withName("change power").hasArg(
-//                        arg().withName("item").from(inventoryItems)
-//                    ).hasArg(
-//                        arg().withName("power").from(inventoryItems)
-//                    ).withDescription("Changes power of specified item").thatCalls(this::modifyItemPower)
+                    ).withDescription("Equips specified item").thatCalls(this::equip),
+                command()
+                    .withName("throw").hasArg(
+                        arg().withName("item").from(inventoryItems)
+                    ).hasArg(
+                        arg().withName("direction").from(Direction.values().toSet())
+                    ).withDescription("Throws item in a direction").thatCalls(this::throwItemInDirection)
             )
 
             .build()
@@ -70,8 +85,8 @@ class InputProcessorTest {
     @Test
     fun functionWithTwoArgs() {
 
-        val response = inputProcessor.parse("change power sword 2")
-        assertEquals("Item power changed to 2!", response)
+        val response = inputProcessor.parse("throw sword north")
+        assertEquals("Threw sword to the north!", response)
     }
 
     @Test
@@ -81,6 +96,9 @@ class InputProcessorTest {
         assertEquals("", response)
     }
 
+    // #----------------
+    // Testing functions
+    // #----------------
 
     // Simple funcs
     @SuppressWarnings("WeakerAccess")
@@ -102,23 +120,7 @@ class InputProcessorTest {
 
     // Use multiple args
     @SuppressWarnings("WeakerAccess")
-    fun modifyItemPower(item: Item, power: Int): String {
-        item.power = power
-        return "Item power changed to %s!".format(item.power)
-    }
-
-    enum class Direction(override val pattern: Regex) : Tokenizable {
-        NORTH(Regex("north")),
-        SOUTH(Regex("south")),
-        EAST(Regex("east")),
-        WEST(Regex("west"))
-    }
-
-    class Item(val name: String, var power: Int) : Tokenizable {
-        override val pattern = Regex(name)
-
-        override fun toString(): String {
-            return "%s(%s)".format(name, power)
-        }
+    fun throwItemInDirection(item: Item, direction: Direction): String {
+        return "Threw %s to the %s!".format(item.name, direction.name.toLowerCase())
     }
 }
